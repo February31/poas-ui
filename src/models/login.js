@@ -43,6 +43,7 @@ const Model = {
       //   console.log(redirect)
       //   history.replace(redirect || '/');
       // }
+      localStorage.setItem("login",true)
       history.replace("/welcome" || '/');
     },
 
@@ -57,6 +58,7 @@ const Model = {
       //     }),
       //   });
       // }
+      localStorage.removeItem("login")
       history.replace("/user/login" || '/');
     },
   },
