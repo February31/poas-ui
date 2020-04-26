@@ -105,36 +105,6 @@ class SentimentList extends React.Component {
   ]
   ;
 
-  // data = [
-  //   {
-  //     eventId: '1',
-  //     text: '勒是雾都，夜',
-  //     similarCount: 5,
-  //     attitude: '正向',
-  //     createdAt: '2020-04-15',
-  //   },
-  //   {
-  //     eventId: '2',
-  //     text: '勒是雾都，夜话',
-  //     similarCount: 5,
-  //     attitude: '正向',
-  //     createdAt: '2020-04-15',
-  //   },
-  //   {
-  //     eventId: '3',
-  //     text: '勒是雾都',
-  //     similarCount: 5,
-  //     attitude: '正向',
-  //     createdAt: '2020-04-15',
-  //   },
-  //   {
-  //     eventId: '4',
-  //     text: '勒是雾',
-  //     similarCount: 4,
-  //     attitude: '正向',
-  //     createdAt: '2020-04-15',
-  //   },
-  // ];
 
   onChange(pagination, filters, sorter, extra) {
     console.log('params', pagination, filters, sorter, extra);

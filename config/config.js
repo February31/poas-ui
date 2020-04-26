@@ -26,6 +26,10 @@ export default defineConfig({
   // umi routes: https://umijs.org/docs/routing
   routes: [
     {
+      path: '/',
+      redirect: '/user/login',
+    },
+    {
       path: '/user',
       component: '../layouts/UserLayout',
       routes: [
@@ -43,12 +47,13 @@ export default defineConfig({
         {
           path: '/',
           component: '../layouts/BasicLayout',
+          // Routes: ['src/pages/Authorized'],
           authority: ['admin', 'user'],
           routes: [
-            {
-              path: '/',
-              redirect: '/welcome',
-            },
+            // {
+            //   path: '/',
+            //   redirect: '/user/login',
+            // },
             {
               path: '/welcome',
               name: 'welcome',
@@ -72,10 +77,48 @@ export default defineConfig({
               ],
             },
             {
-              name: 'list.table-list',
-              icon: 'table',
-              path: '/list',
-              component: './ListTableList',
+              path: '/event',
+              name: '事件分析',
+              icon: 'dashboard',
+              routes: [
+                {
+                  name: '添加事件',
+                  icon: 'table',
+                  path: '/event/addEvent',
+                  component: './AddEvent',
+                },
+                {
+                  name: '事件列表',
+                  icon: 'smile',
+                  path: '/event/eventAnalyse',
+                  component: './ListEvent',
+                },
+              ],
+            },
+            {
+              path: '/sentiment',
+              name: '舆情分析',
+              icon: 'dashboard',
+              routes: [
+                {
+                  name: '舆情分析',
+                  icon: 'smile',
+                  path: '/sentiment/SentimentAnalysis',
+                  component: './SentimentAnalysis',
+                },
+                {
+                  name: '舆情列表',
+                  icon: 'smile',
+                  path: '/sentiment/sentimentList',
+                  component: './sentimentList',
+                },
+                {
+                  name: '评论列表',
+                  icon: 'smile',
+                  path: '/sentiment/CommentList',
+                  component: './CommentList',
+                },
+              ],
             },
             {
               component: './404',
