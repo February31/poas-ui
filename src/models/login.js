@@ -11,47 +11,53 @@ const Model = {
   },
   effects: {
     *login({ payload }, { call, put }) {
+      console.log(payload)
       const response = yield call(fakeAccountLogin, payload);
+      console.log(response)
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       }); // Login successfully
 
-      if (response.status === 'ok') {
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        let { redirect } = params;
+      // if (response.status === 'ok') {
+      //   const urlParams = new URL(window.location.href);
+      //   console.log(urlParams)
+      //   const params = getPageQuery();
+      //   console.log(params)
+      //   let { redirect } = params;
 
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
+      //   if (redirect) {
+      //     const redirectUrlParams = new URL(redirect);
 
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
+      //     if (redirectUrlParams.origin === urlParams.origin) {
+      //       redirect = redirect.substr(urlParams.origin.length);
 
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = '/';
-            return;
-          }
-        }
-
-        history.replace(redirect || '/');
-      }
+      //       if (redirect.match(/^\/.*#/)) {
+      //         redirect = redirect.substr(redirect.indexOf('#') + 1);
+      //       }
+      //     } else {
+      //       window.location.href = '/';
+      //       return;
+      //     }
+      //   }
+      //   console.log(redirect)
+      //   history.replace(redirect || '/');
+      // }
+      history.replace("/welcome" || '/');
     },
 
     logout() {
-      const { redirect } = getPageQuery(); // Note: There may be security issues, please note
+      // const { redirect } = getPageQuery(); // Note: There may be security issues, please note
 
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        history.replace({
-          pathname: '/user/login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
-        });
-      }
+      // if (window.location.pathname !== '/user/login' && !redirect) {
+      //   history.replace({
+      //     pathname: '/user/login',
+      //     search: stringify({
+      //       redirect: window.location.href,
+      //     }),
+      //   });
+      // }
+      history.replace("/user/login" || '/');
     },
   },
   reducers: {
