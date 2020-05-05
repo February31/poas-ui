@@ -7,7 +7,7 @@ export default () => (
   <PageHeaderWrapper content=" 这个页面只有 admin 权限才能查看">
     <Card>
       <Alert
-        message="umi ui 现已发布，欢迎使用 npm run ui 启动体验。"
+        message="现在还没有做完。"
         type="success"
         showIcon
         banner
@@ -22,7 +22,7 @@ export default () => (
           textAlign: 'center',
         }}
       >
-        <SmileTwoTone /> Ant Design Pro <HeartTwoTone twoToneColor="#eb2f96" /> You
+        <SmileTwoTone />
       </Typography.Title>
     </Card>
     <p
@@ -31,10 +31,10 @@ export default () => (
         marginTop: 24,
       }}
     >
-      Want to add more pages? Please refer to{' '}
-      <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
-        use block
-      </a>
+      {/*Want to add more pages? Please refer to{' '}*/}
+      {/*<a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">*/}
+      {/*  use block*/}
+      {/*</a>*/}
       。
     </p>
   </PageHeaderWrapper>
