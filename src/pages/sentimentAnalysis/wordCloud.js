@@ -32,15 +32,21 @@ export class WordCloud extends React.Component {
   state = {
     data: [
       {
-        'x': 'China',
+        'x': '疫情',
         'value': 12,
         'category': 'asia',
       },
       {
-        'x': 'India',
+        'x': '美国',
         'value': 3,
         'category': 'asia',
-      }],
+      },
+      {
+        'x': '特朗普',
+        'value': 3,
+        'category': 'asia',
+      },
+      ],
   };
 
   f(data) {

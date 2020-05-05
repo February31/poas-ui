@@ -1,8 +1,9 @@
-import {list,deleteSentiment,update} from "@/services/sentimentList"
+import {list,deleteSentiment,update,commentStatus} from "@/services/sentimentList"
 export default {
   namespace:"list_sentiment",
   state:{
     sentimentList:[],
+    commentTips:"",
   },
   effects:{
     *list({payload},{call,put}){
@@ -28,6 +29,19 @@ export default {
         type:"show",
       })
       console.log("delete success!")
+    }
+    ,
+    *seeComment({payload,callback},{call,put}){
+      //到后台去查一下，有的话就拿回来。没有爬完的话就提醒。没有的话，就提示开始爬取
+      const res = yield call(commentStatus,payload)
+      yield put({
+        type:"show",
+        payload:{
+          commentTips:res.msg,
+        }
+      })
+      //调用回调函数
+      callback&&callback()
     }
   }
   ,

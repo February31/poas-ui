@@ -1,12 +1,36 @@
-import { Button, Table, Comment,Popover } from 'antd';
+import {
+  Button,
+  Table,
+  Comment,
+  Popover,
+  Menu,
+  PageHeader,
+  Popconfirm,
+  message,
+  Modal,
+  Form,
+  Input,
+  DatePicker,
+} from 'antd';
 import React from 'react';
 import { connect } from 'umi';
+import { MailOutlined, AppstoreOutlined } from '@ant-design/icons';
+import {SentimentChart} from '../sentimentAnalysis/index'
+import {UpdateEvent} from './updateEvent'
+import {AddWarning} from './addWarning'
 
-
-@connect(({ list_sentiment }) => ({
+@connect(({ list_sentiment,list_event }) => ({
   sentimentList: list_sentiment.sentimentList,
+  commentTips:list_sentiment.commentTips,
+  event:list_event.event
 }))
 class SentimentList extends React.Component {
+
+  state = {
+    current: 'list',
+  };
+
+
 
   componentDidMount() {
     this.getSentimentList();
@@ -40,6 +64,25 @@ class SentimentList extends React.Component {
     });
   };
 
+  commentTips = ()=>{
+   const { commentTips } = this.props
+    console.log(commentTips)
+    console.log(commentTips.length)
+  }
+
+  handleCommentConfirm = record =>{
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'list_sentiment/seeComment',
+      payload:record,
+      callback: () => {
+        this.commentTips()
+        console.log("11111111111")
+      }
+    });
+    // message.success("评论实时爬取中，请稍等片刻再看",5)
+  }
+
   columns = [
     {
       title: '舆情',
@@ -57,7 +100,16 @@ class SentimentList extends React.Component {
               </Popover>
               <br/>
               <span>点赞 {record.attitudesCount}</span>,
-              <span>评论 {record.commentsCount}</span>,
+              {/*<span>评论 {record.commentsCount}</span>*/}
+              <Popconfirm
+                title="确定要查看评论吗?"
+                onConfirm={()=>this.handleCommentConfirm(record)}
+                // onCancel={cancel}
+                okText="是"
+                cancelText="否"
+              >
+                <a>评论 {record.commentsCount}</a>
+              </Popconfirm>
               <span>转发{record.repostsCount}</span>,
             </div>
           }
@@ -110,12 +162,58 @@ class SentimentList extends React.Component {
     console.log('params', pagination, filters, sorter, extra);
   }
 
+  handleClick = e => {
+    console.log('click ', e);
+    this.setState({
+      current: e.key,
+    });
+  };
+
+  renderContent(){
+    const data = this.props.sentimentList;
+
+    if(this.state.current==="list"){
+      return (<Table columns={this.columns} dataSource={data} onChange={this.onChange}/>)
+    }else if(this.state.current==="table"){
+      return (<SentimentChart/>)
+    }else if(this.state.current==="update"){
+      return (<UpdateEvent/>)
+    }else {
+      return (<AddWarning/>)
+    }
+  }
   render() {
     const data = this.props.sentimentList;
     return (
-      <Table columns={this.columns} dataSource={data} onChange={this.onChange}/>
+      <div>
+        <PageHeader
+          // className="site-page-header"
+          onBack={() => null}
+          title="美国疫情"
+        />
+        <Menu onClick={this.handleClick} selectedKeys={[this.state.current]} mode="horizontal">
+          <Menu.Item key="list" icon={<MailOutlined />}>
+            舆情列表
+          </Menu.Item>
+          <Menu.Item key="table"  icon={<AppstoreOutlined />}>
+            图表分析
+          </Menu.Item>
+          <Menu.Item key="update">
+            {/*<a href="https://ant.design" target="_blank" rel="noopener noreferrer">*/}
+            {/*  Navigation Four - Link*/}
+            {/*</a>*/}
+            方案配置
+          </Menu.Item>
+          <Menu.Item key="warning">
+            报警配置
+          </Menu.Item>
+        </Menu>
+        {this.renderContent()}
+      </div>
+
     );
   }
 }
 
 export default SentimentList;
+

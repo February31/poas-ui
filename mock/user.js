@@ -76,12 +76,12 @@ export default {
     },
   ],
   'POST /api/login/account': (req, res) => {
-    const { password, userName, type } = req.body;
-
+    // const { password, userName, type } = req.body;
+    const { password, userName, } = req.body;
     if (password === 'a' && userName === 'admin') {
       res.send({
-        status: 'ok',
-        type,
+        // status: 'ok',
+        // type,
         currentAuthority: 'admin',
       });
       return;
@@ -90,7 +90,7 @@ export default {
     if (password === 'a' && userName === 'user') {
       res.send({
         status: 'ok',
-        type,
+        // type,
         currentAuthority: 'user',
       });
       return;

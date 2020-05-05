@@ -5,8 +5,8 @@ export default {
       id: '1',
       name: '美国疫情',
       keywords: '疫情 美国',
-      start_time: '2020-04-15',
-      end_time: '2020-04-16',
+      start_time: '2020-04-15 15:00',
+      end_time: '2020-04-16 17:00',
       status: '未开始',
     },
       {
@@ -202,6 +202,40 @@ export default {
     },
 
   ],
+  "GET /api/listUser":[
+    {
+      'id':1,
+      "name":"admin",
+      "role":"admin",
+      "status":"在职"
+    },
+    {
+      'id':2,
+      "name":"user",
+      "role":"user",
+      "status":"在职"
+    }
+  ],
+  "GET /api/logList":[{
+    'id':1,
+    "user":"user",
+    "time":"2020-4-15",
+    "function":"登录",
+    "operation":"用户登录",
+    "parameter":""
+  },
+    {
+      'id':2,
+      "user":"admin",
+      "time":"2020-4-15",
+      "function":"登录",
+      "operation":"用户登录",
+      "parameter":""
+    }],
+  "GET /api/commentStatus":{
+    "msg":"爬取中……",
+    "status":"1"
+  }
   // 'POST /api/login/account': (req, res) => {
   //   const { password, userName, type } = req.body;
   //

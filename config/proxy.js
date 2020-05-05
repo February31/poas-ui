@@ -7,11 +7,11 @@
  */
 export default {
   dev: {
-    '/api/': {
-      target: 'https://preview.pro.ant.design',
+    '/poas': {
+      target: 'http://localhost:8080',
       changeOrigin: true,
       pathRewrite: {
-        '^': '',
+        '^/poas': '',
       },
     },
   },

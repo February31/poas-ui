@@ -161,6 +161,7 @@ class ListEvent extends React.Component {
             <Button type="link" size={'small'}
                     onClick={() => this.handleStartOrEnd(record)}>{record.status === '未开始' ? '开始' : '结束'}</Button>
             <Button type="link" size={'small'} onClick={() => this.handleEdit(record)}>编辑</Button>
+                {record.status==='未开始'?null:<Button type="link" size={'small'}>查看舆情</Button>}
           </span>
 
             )}

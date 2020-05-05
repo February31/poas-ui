@@ -52,8 +52,28 @@ const Demo = (props) => {
     });
     message.success("添加成功", 3)
   };
+  function range(start, end) {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+
+  function disabledDate(current) {
+    // Can not select days before today and today
+    return current < moment().startOf('day');
+  }
+
+  function disabledDateTime() {
+    return {
+      disabledHours: () => range(0,moment().hour()),
+      disabledMinutes: () =>range(0,moment().minute())
+    };
+  }
 
   return (
+
     <Form {...layout} name="nest-messages" form={form} onFinish={onFinish} validateMessages={validateMessages}>
       <Form.Item
         name="name"
@@ -78,10 +98,10 @@ const Demo = (props) => {
         <Input.TextArea/>
       </Form.Item>
       <Form.Item name="start-time" label="开始时间" {...config}>
-        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"/>
+        <DatePicker disabledDate={disabledDate} disabledTime={disabledDateTime} showTime format="YYYY-MM-DD HH:mm:ss"/>
       </Form.Item>
       <Form.Item name="end-time" label="结束时间" {...config}>
-        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"/>
+        <DatePicker disabledDate={disabledDate} disabledTime={disabledDateTime} showTime format="YYYY-MM-DD HH:mm:ss"/>
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
         <Button type="primary" htmlType="submit">

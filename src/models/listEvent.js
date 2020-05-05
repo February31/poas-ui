@@ -8,7 +8,9 @@ export default {
     dataList:[],
     loading:false,
     modalVisible:false,
-    formData:{}
+    formData:{},
+    event:{},
+    warning:[]
   },
 
   effects:{
@@ -36,6 +38,9 @@ export default {
         payload:false
       })
       console.log('123456');
+    },
+    *addWarning({payload},{call,put}){
+      console.log("11111111111111")
     }
   },
 

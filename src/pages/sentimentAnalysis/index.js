@@ -14,14 +14,10 @@ import {WordCloud} from './wordCloud'
 @connect(({ sentiment_overview }) => ({
   wordCloudData: sentiment_overview.wordCloudData,
 }))
-class SliderChart extends React.Component {
+export class SentimentChart extends React.Component {
   pieData = [
-    { name: 'IE', value: 56.33 },
-    { name: 'Chrome', value: 24.03 },
-    { name: 'Firefox', value: 10.38 },
-    { name: 'Safari', value: 4.77 },
-    { name: 'Opera', value: 0.91 },
-    { name: 'Unknown', value: 0.2 },
+    { name: '正向', value: 60 },
+    { name: '负向', value: 40 },
   ];
   columnData = [
     {
@@ -201,8 +197,6 @@ class SliderChart extends React.Component {
     );
   }
 }
-
-export default SliderChart;
 
 
 
