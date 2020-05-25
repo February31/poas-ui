@@ -3,7 +3,7 @@ import request from 'umi-request';
 export function getWordCloudData(params) {
   return request("/v1/sentiment/getWordCloudData",{
     params:{
-      eventId:params
+      eventId:params.eventId
     }
   })
 }

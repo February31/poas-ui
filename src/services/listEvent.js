@@ -29,3 +29,13 @@ export function update(params) {
 export  function addWarning(params) {
   return request.post("/v1/warning/add", { data:params })
 }
+
+export  function deleteWarning(params) {
+  return request.post("/v1/warning/delete", { data:params })
+}
+
+export function getAllWarning(param) {
+  return request.get("/v1/warning/getAll",{params:{userId:param}})
+  // return request("/api/listEvent")
+}
+

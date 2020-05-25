@@ -15,6 +15,20 @@ const {Column} = Table
 }))
 export class AddWarning extends React.Component {
 
+  componentDidMount(){
+    this.getData()
+  }
+
+  getData(){
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'list_event/getWaring',
+      payload: {
+        "userId":this.props.currentUser.id
+      }
+    });
+  }
+
   formRef = React.createRef();
 
   state = {

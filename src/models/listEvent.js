@@ -1,4 +1,4 @@
-import {list,update,start,finish,getByName,addWarning} from '@/services/listEvent'
+import {list,update,start,finish,getByName,addWarning,getAllWarning,deleteWarning} from '@/services/listEvent'
 import {list as getSentiment} from '@/services/sentimentList'
 import {message} from 'antd';
 import { history } from 'umi';
@@ -91,10 +91,36 @@ export default {
       const res = yield call(addWarning,payload)
       console.log(res.msg)
       if (res.msg==="成功"){
+        message.success("添加成功")
+        const res = yield call(getAllWarning,payload.userId)
         yield put({
           type:"show",
           payload:{
-            warning:[payload]
+            warning:res.data
+          }
+        })
+      }else {
+        message.error("添加失败")
+      }
+    },
+    *getWaring({payload},{call,put}){
+      const res = yield call(getAllWarning,payload.userId)
+      yield put({
+        type:"show",
+        payload:{
+          warning:res.data
+        }
+      })
+    },
+    *deleteWarning({payload},{call,put}){
+      console.log(payload)
+      const res = yield call(deleteWarning,payload)
+      if (res.msg==="成功"){
+        message.success("删除成功")
+        yield put({
+          type:"getWaring",
+          payload:{
+            "userId":payload.userId
           }
         })
       }
