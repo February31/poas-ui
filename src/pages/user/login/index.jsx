@@ -31,9 +31,9 @@ const Login = props => {
       // payload: { ...values, type },
       payload: { ...values },
     });
-    dispatch({
-      type: 'user/fetchCurrent',
-    });
+    // dispatch({
+    //   type: 'user/fetchCurrent',
+    // });
   };
   return (
     <div className={styles.main}>
@@ -44,7 +44,7 @@ const Login = props => {
           )}
 
           <UserName
-            name="userName"
+            name="username"
             placeholder="用户名: admin or user"
             rules={[
               {
@@ -64,18 +64,18 @@ const Login = props => {
             ]}
           />
         </Tab>
-        <div>
-          <Checkbox checked={autoLogin} onChange={e => setAutoLogin(e.target.checked)}>
-            自动登录
-          </Checkbox>
-          <a
-            style={{
-              float: 'right',
-            }}
-          >
-            忘记密码
-          </a>
-        </div>
+        {/*<div>*/}
+        {/*  <Checkbox checked={autoLogin} onChange={e => setAutoLogin(e.target.checked)}>*/}
+        {/*    自动登录*/}
+        {/*  </Checkbox>*/}
+        {/*  <a*/}
+        {/*    style={{*/}
+        {/*      float: 'right',*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    忘记密码*/}
+        {/*  </a>*/}
+        {/*</div>*/}
         <Submit loading={submitting}>登录</Submit>
 
       </LoginFrom>

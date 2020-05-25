@@ -27,7 +27,9 @@ const config = {
 };
 
 
-@connect(() => ({}))
+@connect((admin) => ({
+  isAddUser:admin.isAddUser
+}))
 export class AddUser extends React.Component {
   formRef = React.createRef();
   onReset = () => {
@@ -42,7 +44,7 @@ export class AddUser extends React.Component {
   };
 
   onFinish = values => {
-    const { dispatch } = props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'admin/addUser',
       payload: {
@@ -87,13 +89,8 @@ export class AddUser extends React.Component {
           </Form.Item>
           <Form.Item
             name="role"
-            label="角色"
-            rules={[
-              {
-                required: true,
-              },
-            ]}>
-            <Select defaultValue="user" style={{ width: 120 }}>
+            label="角色">
+            <Select style={{ width: 120 }}>
               <Option value="user">普通用户</Option>
               <Option value="admin">管理员</Option>
             </Select>

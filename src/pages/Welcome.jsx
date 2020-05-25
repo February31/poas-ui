@@ -1,71 +1,47 @@
-//  import React from 'react';
-// import { PageHeaderWrapper } from '@ant-design/pro-layout';
-// import { Card, Typography, Alert } from 'antd';
-// import styles from './Welcome.less';
-//
-// const CodePreview = ({ children }) => (
-//   <pre className={styles.pre}>
-//     <code>
-//       <Typography.Text copyable>{children}</Typography.Text>
-//     </code>
-//   </pre>
-// );
-//
-// export default () => (
-//   // <PageHeaderWrapper>
-//   //   <Card>
-//   //     <Alert
-//   //       message="umi ui 现已发布，点击右下角 umi 图标即可使用"
-//   //       type="success"
-//   //       showIcon
-//   //       banner
-//   //       style={{
-//   //         margin: -12,
-//   //         marginBottom: 24,
-//   //       }}
-//   //     />
-//   //     <Typography.Text strong>
-//   //       <a target="_blank" rel="noopener noreferrer" href="https://pro.ant.design/docs/block">
-//   //         基于 block 开发，快速构建标准页面
-//   //       </a>
-//   //     </Typography.Text>
-//   //     <CodePreview> npm run ui</CodePreview>
-//   //     <Typography.Text
-//   //       strong
-//   //       style={{
-//   //         marginBottom: 12,
-//   //       }}
-//   //     >
-//   //       <a
-//   //         target="_blank"
-//   //         rel="noopener noreferrer"
-//   //         href="https://pro.ant.design/docs/available-script#npm-run-fetchblocks"
-//   //       >
-//   //         获取全部区块
-//   //       </a>
-//   //     </Typography.Text>
-//   //     <CodePreview> npm run fetch:blocks</CodePreview>
-//   //   </Card>
-//   //   <p
-//   //     style={{
-//   //       textAlign: 'center',
-//   //       marginTop: 24,
-//   //     }}
-//   //   >
-//   //     Want to add more pages? Please refer to{' '}
-//   //     <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
-//   //       use block
-//   //     </a>
-//   //     。
-//   //   </p>
-//   // </PageHeaderWrapper>
-// );
+import { Form, Input, Button, Select, Divider, message, Modal,Result } from 'antd';
+import { connect,history } from 'umi';
+import React from 'react';
 
-const Welcome = props=>{
-  return(
-    <div>
-      这里是首页
-    </div>
-  )
+
+
+
+//这里的warning是随便绑定的，没有作用
+@connect((user) => ({
+  currentUser:user.currentUser
+}))
+export default class Welcome extends React.Component {
+  componentDidMount(){
+    //进来的时候就查一下有没有预警
+    this.props.dispatch({
+      type:"user/fetchWarning",
+      payload:localStorage.getItem("user")
+    })
+  }
+  jumpToAddEvent(){
+    history.push("/event/addEvent")
+  }
+
+  jumpToSentiment(){
+    history.push("/event/listEvent")
+  }
+
+  render() {
+    return (
+      <div>
+
+        <Result
+          status="success"
+          title="微博舆情分析系统"
+          // subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+          extra={[
+            <Button type="primary" key="console" onClick={this.jumpToAddEvent}>
+              添加事件
+            </Button>,
+            <Button key="buy" onClick={this.jumpToSentiment}>事件列表</Button>,
+          ]}
+        />
+      </div>
+    );
+  }
 }
-export default Welcome
+

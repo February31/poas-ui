@@ -2,6 +2,7 @@ import { Form, Input, Button, DatePicker, Divider, message } from 'antd';
 import { connect } from 'umi';
 import React from 'react';
 import moment from 'moment';
+import styles from './style.less';
 
 const layout = {
   labelCol: {
@@ -46,8 +47,8 @@ const Demo = (props) => {
       type: 'add_event/add',
       payload: {
         ...values,
-        startTime:moment(values.start_time).format("YYYY-MM-DD HH:mm:ss"),
-        endTime:moment(values.end_time).format("YYYY-MM-DD HH:mm:ss")
+        startTime:moment(values.time1).format("YYYY-MM-DD HH:mm:ss"),
+        endTime:moment(values.time2).format("YYYY-MM-DD HH:mm:ss")
       },
     });
     message.success("添加成功", 3)
@@ -73,46 +74,51 @@ const Demo = (props) => {
   }
 
   return (
+      <Form {...layout} name="nest-messages" form={form} onFinish={onFinish} validateMessages={validateMessages} className={styles.aaa}>
+        <Form.Item
+          name="name"
+          label="事件名称"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input className={styles.main}/>
+        </Form.Item>
+        <Form.Item
+          name="keywords"
+          label="关键词组"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input.TextArea className={styles.main}/>
+        </Form.Item>
+        <Form.Item name="time1" label="开始时间" {...config}>
+          {/*<DatePicker disabledDate={disabledDate} disabledTime={disabledDateTime} showTime format="YYYY-MM-DD HH:mm:ss"/>*/}
+          <DatePicker disabledDate={disabledDate} disabledTime={disabledDateTime} showTime className={styles.main}/>
+        </Form.Item>
+        <Form.Item name="time2" label="结束时间" {...config} >
+          <DatePicker disabledDate={disabledDate} disabledTime={disabledDateTime} showTime format="YYYY-MM-DD HH:mm:ss" className={styles.main}/>
+        </Form.Item>
+        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <Button type="primary" htmlType="submit">
+            保存
+          </Button>
+          <Divider type='vertical'/>
+          <Divider type='vertical'/>
+          <Divider type='vertical'/>
+          <Divider type='vertical'/>
+          <Button type="primary" onClick={onReset}>
+            重置
+          </Button>
+        </Form.Item>
+      </Form>
 
-    <Form {...layout} name="nest-messages" form={form} onFinish={onFinish} validateMessages={validateMessages}>
-      <Form.Item
-        name="name"
-        label="事件名称"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Input/>
-      </Form.Item>
-      <Form.Item
-        name="keywords"
-        label="关键词组"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Input.TextArea/>
-      </Form.Item>
-      <Form.Item name="start-time" label="开始时间" {...config}>
-        <DatePicker disabledDate={disabledDate} disabledTime={disabledDateTime} showTime format="YYYY-MM-DD HH:mm:ss"/>
-      </Form.Item>
-      <Form.Item name="end-time" label="结束时间" {...config}>
-        <DatePicker disabledDate={disabledDate} disabledTime={disabledDateTime} showTime format="YYYY-MM-DD HH:mm:ss"/>
-      </Form.Item>
-      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button type="primary" htmlType="submit">
-          保存
-        </Button>
-        <Divider type='vertical'/>
-        <Button type="primary" onClick={onReset}>
-          重置
-        </Button>
-      </Form.Item>
-    </Form>
+
   );
 
 };

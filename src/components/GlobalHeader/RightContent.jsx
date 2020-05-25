@@ -1,5 +1,5 @@
-import { Tooltip, Tag } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Tooltip, Tag,Badge,notification,Button  } from 'antd';
+import { NotificationOutlined } from '@ant-design/icons';
 import React from 'react';
 import { connect } from 'umi';
 import Avatar from './AvatarDropdown';
@@ -20,6 +20,30 @@ const GlobalHeaderRight = props => {
   if (theme === 'dark' && layout === 'topmenu') {
     className = `${styles.right}  ${styles.dark}`;
   }
+
+  const close = () => {
+    const {dispatch} = props
+    dispatch({
+      type:"user/handleWarning",
+      payload:props.warning[0].eventId
+    })
+    notification.close("key")
+  };
+  const openNotification = () => {
+    // const key = `open${Date.now()}`;
+    const key = "key"
+    const btn = (
+      <Button type="primary" size="small" onClick={close}>
+        已处理
+      </Button>
+    );
+    notification.open({
+      message: '舆情预警！！！',
+      description: "在"+props.warning[0].time+"采集到相关舆情"+props.warning[0].size+"条，达到舆情报警条件！",
+      btn,
+      key,
+    });
+  };
 
   return (
     <div className={className}>
@@ -58,6 +82,11 @@ const GlobalHeaderRight = props => {
       {/*    <QuestionCircleOutlined />*/}
       {/*  </a>*/}
       {/*</Tooltip>*/}
+      <div onClick={openNotification}>
+        <Badge count={props.warning.length} className={styles.action}/>
+      </div>
+
+
       <Avatar />
       {REACT_APP_ENV && (
         <span>
@@ -69,7 +98,8 @@ const GlobalHeaderRight = props => {
   );
 };
 
-export default connect(({ settings }) => ({
+export default connect(({ settings,user }) => ({
   theme: settings.navTheme,
   layout: settings.layout,
+  warning:user.warning
 }))(GlobalHeaderRight);

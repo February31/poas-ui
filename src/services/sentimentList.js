@@ -1,20 +1,32 @@
-import request from 'umi-request';
-export function list() {
-  // return request.get("http://localhost:8080/event/getEvent")
-  return request("/api/listSentiment")
+// import request from 'umi-request';
+import request from '@/utils/request';
+export function list(parmas) {
+  return request.get("/v1/sentiment/listText",{params:{ eventId:parmas.id}})
 }
 
-export function deleteSentiment(parmas) {
-  // return request.get("http://localhost:8080/spider/crawlText",parmas)
-  return request("/api/deleteSentiment")
+export function listByTime(parmas) {
+  return request.get("/v1/sentiment/listTextByTime",{params:{
+      time:parmas.time,
+      eventId:parmas.eventId}})
 }
 
-export function update(parmas) {
+export function deleteSentiment(params) {
   // return request.get("http://localhost:8080/spider/crawlText",parmas)
-  return request("/api/updateAttitude")
+  return request.post("/v1/sentiment/delete",{data: params })
+}
+
+export function update(params) {
+  // return request.get("http://localhost:8080/spider/crawlText",parmas)
+  return request.post("/v1/sentiment/updateAttitude",{data:params })
 }
 
 export function commentStatus(parmas) {
   // return request.get("http://localhost:8080/spider/crawlText",parmas)
-  return request("/api/commentStatus")
+  return request("/v1/sentiment/listComment")
+}
+
+export function crawlComment(params) {
+  return request.post("/v1/spider/crawlComment", { params:{
+    textId:params.textId
+    } })
 }

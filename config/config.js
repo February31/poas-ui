@@ -60,43 +60,22 @@ export default defineConfig({
               icon: 'smile',
               component: './Welcome',
             },
-            {
-              path: '/admin',
-              name: '管理员',
-              icon: 'crown',
-              authority: ['admin'],
-              routes: [
-                {
-                  path: '/admin/sub-page',
-                  name: '待制作的子目录',
-                  icon: 'smile',
-                  component: './admin',
-                  authority: ['admin'],
-                },
-                {
-                  path: '/admin/log',
-                  name: '日志',
-                  icon: 'smile',
-                  component: './logList',
-                  authority: ['admin'],
-                },
-              ],
-            },
+
             {
               path: '/event',
-              name: '事件分析',
-              icon: 'dashboard',
+              name: '事件管理',
+              icon: 'form',
               routes: [
                 {
                   name: '添加事件',
-                  icon: 'table',
+                  icon: 'form',
                   path: '/event/addEvent',
                   component: './addEvent',
                 },
                 {
                   name: '事件列表',
-                  icon: 'smile',
-                  path: '/event/eventAnalyse',
+                  icon: 'UnorderedListOutlined',
+                  path: '/event/listEvent',
                   component: './listEvent',
                 },
               ],
@@ -104,25 +83,61 @@ export default defineConfig({
             {
               path: '/sentiment',
               name: '舆情分析',
-              icon: 'dashboard',
+              icon: 'FileSearchOutlined',
               routes: [
-                // {
-                //   name: '舆情分析',
-                //   icon: 'smile',
-                //   path: '/sentiment/sentimentAnalysis',
-                //   component: './sentimentAnalysis',
-                // },
                 {
                   name: '舆情列表',
-                  icon: 'smile',
+                  icon: 'UnorderedListOutlined',
                   path: '/sentiment/sentimentList',
                   component: './sentimentList',
                 },
                 {
                   name: '评论列表',
-                  icon: 'smile',
+                  icon: 'UnorderedListOutlined',
                   path: '/sentiment/commentList',
                   component: './commentList',
+                },
+              ],
+            },
+            {
+              path: '/account',
+              name: '个人页',
+              icon: 'UserOutlined',
+              routes: [
+
+                {
+                  name: '个人设置',
+                  icon: 'SettingOutlined',
+                  path: '/account/setting',
+                  component: './setting',
+                },
+                {
+                  name: '修改密码',
+                  icon: 'SettingOutlined',
+                  path: '/account/security',
+                  component: './security',
+                },
+              ],
+            },
+            {
+              path: '/admin',
+              name: '管理员',
+              icon: 'crown',
+              authority: ['admin'],
+              routes: [
+                {
+                  path: '/admin/user',
+                  name: '用户管理',
+                  icon: 'UserDeleteOutlined',
+                  component: './admin',
+                  authority: ['admin'],
+                },
+                {
+                  path: '/admin/log',
+                  name: '日志管理',
+                  icon: 'BookOutlined',
+                  component: './logList',
+                  authority: ['admin'],
                 },
               ],
             },
@@ -146,7 +161,16 @@ export default defineConfig({
     'primary-color': defaultSettings.primaryColor,
   },
   ignoreMomentLocale: true,
-  proxy: proxy[REACT_APP_ENV || 'dev'],
+  // proxy: proxy[REACT_APP_ENV || 'dev'],
+  proxy: {
+    '/v1': {
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/v1': '',
+      },
+    },
+  },
   manifest: {
     basePath: '/',
   },

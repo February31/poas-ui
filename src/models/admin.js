@@ -1,4 +1,4 @@
-import {listUser,updateRole,deleteUser} from "@/services/admin"
+import {listUser,updateRole,deleteUser,addUser} from "@/services/admin"
 export default {
   namespace:"admin",
   state:{
@@ -6,18 +6,41 @@ export default {
     isAddUser:false,
   },
   effects:{
-    *listUser({payload},{call,put}){
+    *listUser(_,{call,put}){
       const res = yield call(listUser)
       console.log(res)
       yield put({
         type:"show",
         payload:{
-          userList:res,
+          userList:res.data,
         }
       })
     },
     *addUser({payload},{call,put}){
-      const res = yield call(listUser)
+      console.log(payload)
+      const res = yield call(addUser,payload)
+      yield put({
+        type:"show",
+        payload:{
+          isAddUser:false,
+        }
+      })
+      yield put({
+        type:"listUser",
+      })
+    }
+    ,
+    *updateRole({payload},{call,put}){
+      const res = yield call(updateRole,payload)
+      yield put({
+        type:"listUser",
+      })
+    },
+    *deleteUser({payload},{call,put}){
+      const res = yield call(deleteUser,payload)
+      yield put({
+        type:"listUser",
+      })
     }
   },
   reducers:{

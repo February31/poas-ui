@@ -41,16 +41,16 @@ const LoginItem = props => {
     tabUtil,
     ...restProps
   } = props;
-  const onGetCaptcha = useCallback(async mobile => {
-    const result = await getFakeCaptcha(mobile);
-
-    if (result === false) {
-      return;
-    }
-
-    message.success('获取验证码成功！验证码为：1234');
-    setTiming(true);
-  }, []);
+  // const onGetCaptcha = useCallback(async mobile => {
+  //   const result = await getFakeCaptcha(mobile);
+  //
+  //   if (result === false) {
+  //     return;
+  //   }
+  //
+  //   message.success('获取验证码成功！验证码为：1234');
+  //   setTiming(true);
+  // }, []);
   useEffect(() => {
     let interval = 0;
     const { countDown } = props;

@@ -4,25 +4,20 @@ import {
   Comment,
   Popover,
   Menu,
-  PageHeader,
-  Popconfirm,
-  message,
-  Modal,
-  Form,
-  Input,
-  DatePicker,
+  PageHeader, DatePicker,
 } from 'antd';
 import React from 'react';
-import { connect } from 'umi';
+import { connect,history } from 'umi';
 import { MailOutlined, AppstoreOutlined } from '@ant-design/icons';
 import {SentimentChart} from '../sentimentAnalysis/index'
 import {UpdateEvent} from './updateEvent'
 import {AddWarning} from './addWarning'
+import style  from './style.less'
+import moment from 'moment';
 
-@connect(({ list_sentiment,list_event }) => ({
+@connect(({ list_sentiment }) => ({
   sentimentList: list_sentiment.sentimentList,
-  commentTips:list_sentiment.commentTips,
-  event:list_event.event
+  event:list_sentiment.event
 }))
 class SentimentList extends React.Component {
 
@@ -33,7 +28,9 @@ class SentimentList extends React.Component {
 
 
   componentDidMount() {
-    this.getSentimentList();
+    if (typeof this.props.event.name==="undefined"){
+      history.push("/event/listEvent")
+    }
   }
 
 
@@ -46,17 +43,7 @@ class SentimentList extends React.Component {
     });
   };
 
-
-  getSentimentList = () => {
-    console.log(this.props);
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'list_sentiment/list',
-    });
-  };
-
   handleEditAttitude = (record) => {
-    console.log(this.props);
     const { dispatch } = this.props;
     dispatch({
       type: 'list_sentiment/update',
@@ -70,17 +57,42 @@ class SentimentList extends React.Component {
     console.log(commentTips.length)
   }
 
-  handleCommentConfirm = record =>{
+  handleSeeComment = record =>{
+    const { dispatch } = this.props;
+    console.log(record);
+    dispatch({
+      type:"list_sentiment/seeComment",
+      payload:{
+        ...record
+      }
+    })
+  }
+
+  handleCrawlComment = (record) => {
+
+    const { dispatch } = this.props;
+    console.log(record);
+    dispatch({
+      type:"list_sentiment/crawlComment",
+      payload:{
+        "textId":record.weiboId,
+        "id":this.props.event.id
+      }
+    })
+  };
+
+  handleDatePicker=(value)=>{
+    if (value===null){
+      value = moment()
+    }
     const { dispatch } = this.props;
     dispatch({
-      type: 'list_sentiment/seeComment',
-      payload:record,
-      callback: () => {
-        this.commentTips()
-        console.log("11111111111")
+      type:"list_sentiment/listByTime",
+      payload:{
+        "time":value.format("YYYY-MM-DD HH:00"),
+        "eventId":this.props.event.id
       }
-    });
-    // message.success("评论实时爬取中，请稍等片刻再看",5)
+    })
   }
 
   columns = [
@@ -100,16 +112,7 @@ class SentimentList extends React.Component {
               </Popover>
               <br/>
               <span>点赞 {record.attitudesCount}</span>,
-              {/*<span>评论 {record.commentsCount}</span>*/}
-              <Popconfirm
-                title="确定要查看评论吗?"
-                onConfirm={()=>this.handleCommentConfirm(record)}
-                // onCancel={cancel}
-                okText="是"
-                cancelText="否"
-              >
-                <a>评论 {record.commentsCount}</a>
-              </Popconfirm>
+              <span>评论 {record.commentsCount}</span>
               <span>转发{record.repostsCount}</span>,
             </div>
           }
@@ -118,6 +121,7 @@ class SentimentList extends React.Component {
     },
     {
       title: '相似舆情',
+      align: 'center',
       dataIndex: 'similarity',
       key: 'similarity',
       sorter: (a, b) => a.similarCount - b.similarCount,
@@ -145,11 +149,20 @@ class SentimentList extends React.Component {
       key: 'createdAt',
     },
     {
+      title: "评论采集",
+      dataIndex: 'commentStatus',
+      key: 'commentStatus',
+    },
+    {
       align: 'center',
       title: '操作',
       key: 'action',
       render: (record) => (
         <span>
+            {record.commentStatus==="未采集"
+              ?<Button type="link" size={'small'} onClick={()=>this.handleCrawlComment(record)}>采集评论</Button>
+              :<Button type="link" size={'small'} onClick={()=>this.handleSeeComment(record)}>查看评论</Button>
+            }
             <Button type="link" size={'small'} onClick={()=>this.handleDelete(record)}>删除</Button>
           </span>
       ),
@@ -173,7 +186,12 @@ class SentimentList extends React.Component {
     const data = this.props.sentimentList;
 
     if(this.state.current==="list"){
-      return (<Table columns={this.columns} dataSource={data} onChange={this.onChange}/>)
+      return (
+        <div>
+          <DatePicker showTime format="YYYY-MM-DD HH:00" className={style.datePicker} placeholder="选择时间查看舆情" onChange={this.handleDatePicker}/>
+          <Table columns={this.columns} dataSource={data} onChange={this.onChange}/>
+        </div>
+        )
     }else if(this.state.current==="table"){
       return (<SentimentChart/>)
     }else if(this.state.current==="update"){
@@ -183,13 +201,13 @@ class SentimentList extends React.Component {
     }
   }
   render() {
-    const data = this.props.sentimentList;
+    const event = this.props.event
     return (
-      <div>
+      <div className={style.content}>
         <PageHeader
           // className="site-page-header"
           onBack={() => null}
-          title="美国疫情"
+          title={event.name}
         />
         <Menu onClick={this.handleClick} selectedKeys={[this.state.current]} mode="horizontal">
           <Menu.Item key="list" icon={<MailOutlined />}>

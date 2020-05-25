@@ -30,7 +30,7 @@ export class UserList extends React.Component {
     message.error('Click on No');
   };
   handleConfirm = (record) => {
-    message.error('Click on YES');
+    message.success('Click on YES');
     const { dispatch } = this.props;
     dispatch({
       type: 'admin/updateRole',

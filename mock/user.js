@@ -77,8 +77,8 @@ export default {
   ],
   'POST /api/login/account': (req, res) => {
     // const { password, userName, type } = req.body;
-    const { password, userName, } = req.body;
-    if (password === 'a' && userName === 'admin') {
+    const { password, username, } = req.body;
+    if (password === 'a' && username === 'admin') {
       res.send({
         // status: 'ok',
         // type,
@@ -87,29 +87,13 @@ export default {
       return;
     }
 
-    if (password === 'a' && userName === 'user') {
+    if (password === 'a' && username === 'user') {
       res.send({
         status: 'ok',
         // type,
         currentAuthority: 'user',
       });
-      return;
     }
-
-    if (type === 'mobile') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
-      });
-      return;
-    }
-
-    res.send({
-      status: 'error',
-      type,
-      currentAuthority: 'guest',
-    });
   },
   'POST /api/register': (req, res) => {
     res.send({

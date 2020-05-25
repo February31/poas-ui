@@ -1,15 +1,10 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
+import request from 'umi-request';
 
-export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
+export async function login(params) {
+  return request('/v1/poas/login', {
     method: 'POST',
+    requestType: 'form',
     data: params,
   });
-  // return request('/poas/poas/login', {
-  //   method: 'POST',
-  //   data: params,
-  // });
-}
-export async function getFakeCaptcha(mobile) {
-  return request(`/api/login/captcha?mobile=${mobile}`);
 }

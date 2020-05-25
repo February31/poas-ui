@@ -8,9 +8,9 @@ export default {
   effects: {
     * add({ payload }, { call, put }) {
       console.log(payload);
-      // const result =yield call(addEvent,payload);
-      // console.log(result);
-      history.push("/eventAnalyse");
+      const result =yield call(addEvent,payload);
+      console.log(result);
+      history.push("/event/listEvent");
     }
   }
 }

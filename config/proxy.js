@@ -7,11 +7,11 @@
  */
 export default {
   dev: {
-    '/poas': {
+    '/aaa': {
       target: 'http://localhost:8080',
       changeOrigin: true,
       pathRewrite: {
-        '^/poas': '',
+        '^/aaa': '',
       },
     },
   },

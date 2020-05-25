@@ -1,25 +1,49 @@
-import {getWordCloudData} from '@/services/sentimentOverview'
+import {getWordCloudData,getPieData,getLineChartByDay} from '@/services/sentimentOverview'
 export default {
   namespace:"sentiment_overview",
   state:{
     wordCloudData:[
-      {
-        'x': 'United States',
-        'value': 324982000,
-        'category': 'america',
-      },
     ],
+    pieData:[],
+    lineData:[],
   },
   effects:{
-    *wordCloudData({payload},{call,put}){
-      const res = yield call(getWordCloudData)
+    *getWordCloudData({payload,callback},{call,put}){
+      const res = yield call(getWordCloudData,payload)
+      console.log(res)
       yield put({
         type:"show",
         payload: {
-          wordCloudData:res
+          wordCloudData:res.data
+        }
+      })
+      //调用回调函数
+      callback&&callback()
+    },
+    *getPieData({payload},{call,put}){
+    //  get pie chart data
+      const pie = yield call(getPieData,payload)
+      console.log(pie)
+      yield put({
+        type:"show",
+        payload: {
+          pieData:pie.data
         }
       })
     },
+    *getLineData({payload},{call,put}){
+      //get line chart data
+      const res = yield call(getLineChartByDay,payload)
+      console.log(res)
+      yield put({
+        type:"show",
+        payload: {
+          lineData:res.data
+        }
+      })
+    }
+
+
   }
   ,
   reducers:{

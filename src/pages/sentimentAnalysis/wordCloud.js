@@ -1,6 +1,9 @@
 
 import { Chart, Legend, Axis, Tooltip, Coord, Point, registerShape } from 'viser-react';
 import * as React from 'react';
+import { connect } from 'umi';
+import moment from 'moment';
+import { Card } from 'antd';
 
 const DataSet = require('@antv/data-set');
 
@@ -27,29 +30,17 @@ registerShape('point', 'cloud', {
     });
   },
 });
-
+@connect(({ sentiment_overview,list_sentiment }) => ({
+  data: sentiment_overview.wordCloudData,
+  eventId: list_sentiment.event.id
+}))
 export class WordCloud extends React.Component {
   state = {
     data: [
-      {
-        'x': '疫情',
-        'value': 12,
-        'category': 'asia',
-      },
-      {
-        'x': '美国',
-        'value': 3,
-        'category': 'asia',
-      },
-      {
-        'x': '特朗普',
-        'value': 3,
-        'category': 'asia',
-      },
       ],
   };
 
-  f(data) {
+  handleData(data) {
     const dv = new DataSet.View().source(data);
     const range = dv.range('value');
     const min = range[0];
@@ -79,18 +70,34 @@ export class WordCloud extends React.Component {
   }
 
   componentDidMount() {
-    this.f(this.state.data);
+    this.getData(this.props.eventId)
   }
+
+  getData(eventId) {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'sentiment_overview/getWordCloudData',
+      payload: {
+        eventId:eventId
+      },
+      callback:()=>{
+        this.handleData(this.props.data)
+        console.log('111111111111111');
+      }
+    });
+
+  }
+
 
   render() {
     return (
-      <div>
-        <Chart width={640} height={400} data={this.state.data} scale={scale} padding={[0]}>
-          <Tooltip showTitle={false}></Tooltip>
-          <Coord type="rect" direction="TL"></Coord>
-          <Point position="x*y" color="category" shape="cloud" tooltip="value*category"></Point>
-        </Chart>
-      </div>
+        <Card title="关键词云">
+          <Chart width={500} height={400} data={this.state.data} scale={scale} padding={[0]}>
+            <Tooltip showTitle={false}></Tooltip>
+            <Coord type="rect" direction="TL"></Coord>
+            <Point position="x*y"  shape="cloud" tooltip="value"></Point>
+          </Chart>
+        </Card>
     );
   }
 }

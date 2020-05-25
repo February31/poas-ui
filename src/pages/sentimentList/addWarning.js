@@ -1,14 +1,17 @@
 import { Table, Tag, Button, Form, Input, DatePicker, Card, Modal, Divider, Radio } from 'antd';
 import { history, connect } from 'umi';
 import React from 'react';
+import style from './style.less'
 
 const {Column} = Table
 
 
 //点击开始，发送请求给后端，开始，这是很简单的。
 //问题在于如何去改变状态，打开后变成监控中。
-@connect(({ list_event }) => ({
-  dataList:list_event.warning
+@connect(({ list_event,list_sentiment,user }) => ({
+  dataList:list_event.warning,
+  event:list_sentiment.event,
+  currentUser: user.currentUser,
 }))
 export class AddWarning extends React.Component {
 
@@ -27,7 +30,11 @@ export class AddWarning extends React.Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'list_event/addWarning',
-      payload: values
+      payload: {
+        ...values,
+        "eventId":this.props.event.id,
+        "userId":this.props.currentUser.id
+      }
     });
     this.handleCancel()
   };
@@ -69,37 +76,37 @@ export class AddWarning extends React.Component {
               },
             ]}
           >
-            <Input/>
+            <Input placeholder="输入舆情数量"/>
           </Form.Item>
           <Form.Item
             name="unit"
             label="时间单位"
             rules={[
               {
-                required: false,
+                required: true,
               },
             ]}
           >
-            <Input/>
+            <Input placeholder="XX小时"/>
           </Form.Item>
           <Form.Item
             name="type"
             label="报警方式"
             rules={[
               {
-                required: false,
+                required: true,
               },
             ]}
           >
             <Radio.Group name="type">
-              <Radio value="Station">站内</Radio>
+              <Radio value="station">站内</Radio>
               <Radio value="email">邮件</Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item>
-            <Button key="back" onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel} className={style.btn}>
               取消
-            </Button>,
+            </Button>
             <Button type="primary" htmlType="submit">
               确定
             </Button>
@@ -113,11 +120,10 @@ export class AddWarning extends React.Component {
   render() {
     const { dataList } = this.props;
     return (
-      <div>
+      <div className={style.addWarningMain}>
         <Button type="primary" onClick={this.handleEdit}>添加报警</Button>
-        <span>在这里可以添加报警</span>
         <Table dataSource={dataList}>
-          <Column title="周期" dataIndex="cycle" key="cycle"/>
+          <Column title="周期" dataIndex="unit" key="unit"/>
           <Column title="阈值" dataIndex="max" key="max"/>
           <Column title="预警方式" dataIndex="type" key="type"/>
           <Column

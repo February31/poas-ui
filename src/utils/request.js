@@ -50,8 +50,12 @@ const errorHandler = error => {
  */
 
 const request = extend({
-  errorHandler,
+  // errorHandler,
   // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
+  // credentials: 'include', // 默认请求是否带上cookie
+  headers:{
+    Authorization: localStorage.getItem('user')
+  }
 });
-export default request;
+
+export default request

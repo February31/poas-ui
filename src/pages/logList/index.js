@@ -1,4 +1,4 @@
-import { Table, Button, PageHeader,DatePicker,Form,Input,Select,Radio} from 'antd';
+import { Table, Button, PageHeader,DatePicker,Form,Input,Select,Radio,List} from 'antd';
 import { connect } from 'umi';
 import React from 'react';
 
@@ -15,22 +15,12 @@ class ListLog extends React.Component {
     console.log(values)
     const { dispatch } = this.props;
     dispatch({
-      type: 'list_log/find',
-      payload: {
-        ...values
-      },
-    });
-  };
-
-
-  componentDidMount() {
-    this.getLogList();
-  }
-
-  getLogList = () => {
-    const { dispatch } = this.props;
-    dispatch({
       type: 'list_log/list',
+      payload: {
+        time:values.time,
+        username:values.username,
+        type:values.type
+      },
     });
   };
 
@@ -48,20 +38,20 @@ class ListLog extends React.Component {
             layout="inline"
             onFinish={this.handleFind}
           >
-            <Form.Item label="用户" name="user">
+            <Form.Item label="用户" name="username">
               <Input placeholder="输入用户名" />
             </Form.Item>
             <Form.Item label="时间区间" name="time">
-              <RangePicker showTime />
+              <DatePicker/>
             </Form.Item>
             <br/>
             <br/>
             <br/>
-            <Form.Item label="日志类型" name="type">
+            <Form.Item label="日志类型" name="type" required="true" rules={[{ required: true, },]}>
               <Radio.Group name="type">
                 <Radio value="login">登录日志</Radio>
                 <Radio value="service">业务日志</Radio>
-                <Radio value="all">我全都要</Radio>
+                <Radio value="error">错误日志</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item>
@@ -70,14 +60,17 @@ class ListLog extends React.Component {
           </Form>
 
         </PageHeader>
-        <Table dataSource={logList}>
-          <Column title="编号" dataIndex="id" key="id"/>
-          <Column title="用户" dataIndex="user" key="user"/>
-          <Column title="操作时间" dataIndex="time" key="time"/>
-          <Column title="模块" dataIndex="function" key="function"/>
-          <Column title="操作" dataIndex="operation" key="operation"/>
-          <Column title="参数" dataIndex="parameter" key="parameter"/>
-        </Table>
+        {/*<Table dataSource={logList}>*/}
+        {/*  <Column title="日志" dataIndex="log" key="log"/>*/}
+        {/*</Table>*/}
+        <List
+          size="small"
+          // header={<div>Header</div>}
+          // footer={<div>Footer</div>}
+          bordered
+          dataSource={logList}
+          renderItem={item => <List.Item>{item}</List.Item>}
+        />
       </div>
     );
   }

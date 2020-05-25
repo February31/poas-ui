@@ -1,8 +1,9 @@
 import { stringify } from 'querystring';
 import { history } from 'umi';
-import { fakeAccountLogin } from '@/services/login';
+import { fakeAccountLogin,login } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
+import { message } from 'antd';
 
 const Model = {
   namespace: 'login',
@@ -11,40 +12,22 @@ const Model = {
   },
   effects: {
     *login({ payload }, { call, put }) {
-      console.log(payload)
-      const response = yield call(fakeAccountLogin, payload);
+      //15行和69行搭配着来。
+      // const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(login, payload);
       console.log(response)
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      }); // Login successfully
-
-      // if (response.status === 'ok') {
-      //   const urlParams = new URL(window.location.href);
-      //   console.log(urlParams)
-      //   const params = getPageQuery();
-      //   console.log(params)
-      //   let { redirect } = params;
-
-      //   if (redirect) {
-      //     const redirectUrlParams = new URL(redirect);
-
-      //     if (redirectUrlParams.origin === urlParams.origin) {
-      //       redirect = redirect.substr(urlParams.origin.length);
-
-      //       if (redirect.match(/^\/.*#/)) {
-      //         redirect = redirect.substr(redirect.indexOf('#') + 1);
-      //       }
-      //     } else {
-      //       window.location.href = '/';
-      //       return;
-      //     }
-      //   }
-      //   console.log(redirect)
-      //   history.replace(redirect || '/');
-      // }
-      localStorage.setItem("login",true)
-      history.replace("/welcome" || '/');
+      if (response.message==="登录成功"){
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        }); // Login successfully
+        localStorage.setItem("user",payload.username)
+        localStorage.setItem("login",true)
+        history.replace("/welcome" || '/');
+      }else {
+        message.error("登录失败，请重试")
+        history.push("/user/login")
+      }
     },
 
     logout() {
@@ -58,15 +41,17 @@ const Model = {
       //     }),
       //   });
       // }
+      localStorage.removeItem("user")
       localStorage.removeItem("login")
       history.replace("/user/login" || '/');
     },
   },
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
-      return { ...state, status: payload.status, type: payload.type };
-      // return { ...state };
+      // setAuthority(payload.currentAuthority);
+      setAuthority(payload.data.principal.role);
+      // return { ...state, status: payload.status, type: payload.type };
+      return { ...state };
     },
   },
 };
